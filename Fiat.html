@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Cantar en la Red de Bitcoin</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="search.js" defer></script>
+    <script>
+      // Load shared header fragment into pages. If fetch fails (for example
+      // when opened via file://), insert a minimal fallback header so the
+      // page still shows a proper header.
+      async function loadHeader() {
+        const placeholder = document.getElementById("site-header");
+        const fallback = `
+          <div class="header">
+            <h1>//<a href="index.html"> CANTAR EN LA RED DE BITCOIN [TO SING IN THE BITCOIN NETWORK]</a></h1>
+            <h2><s>// PARA PENSAR CON SATOSHIS [TO THINK WITH SATOSHIS]</s></h2>
+            <div class="search-box"><input type="button" value="🔍" /></div>
+          </div>`;
+
+        try {
+          const res = await fetch("header.html", { cache: "no-cache" });
+          if (!res.ok) {
+            placeholder.innerHTML = fallback;
+            return;
+          }
+          const html = await res.text();
+          placeholder.innerHTML = html;
+        } catch (e) {
+          console.warn("Header include failed, using fallback", e);
+          placeholder.innerHTML = fallback;
+        }
+      }
+      document.addEventListener("DOMContentLoaded", loadHeader);
+
+      function setupUnitsForm() {
+        const form = document.getElementById("units-form");
+        const status = document.getElementById("save-status");
+        const fields = {
+          baseUnit: document.getElementById("base-unit"),
+          decimalZeros: document.getElementById("decimal-zeros"),
+          lightningMsat: document.getElementById("lightning-msat"),
+          thousandsSeparator: document.getElementById("thousands-separator"),
+        };
+        const savedSettings = JSON.parse(
+          localStorage.getItem("units-settings") || "null",
+        );
+
+        if (savedSettings) {
+          fields.baseUnit.value = savedSettings.baseUnit;
+          fields.decimalZeros.value = savedSettings.decimalZeros;
+          fields.lightningMsat.checked = savedSettings.lightningMsat;
+          fields.thousandsSeparator.checked = savedSettings.thousandsSeparator;
+        }
+
+        form.addEventListener("submit", function (event) {
+          event.preventDefault();
+          localStorage.setItem(
+            "units-settings",
+            JSON.stringify({
+              baseUnit: fields.baseUnit.value,
+              decimalZeros: fields.decimalZeros.value,
+              lightningMsat: fields.lightningMsat.checked,
+              thousandsSeparator: fields.thousandsSeparator.checked,
+            }),
+          );
+          status.textContent = "Ajustes guardados.";
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        loadHeader();
+        setupUnitsForm();
+      });
+    </script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      .header {
+        background-color: #2b2b2b;
+        padding: 15px 20px;
+        border-bottom: 2px dotted #00ff00;
+      }
+
+      .header h1 {
+        color: #00ff00;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        font-family: "Rubik", sans-serif;
+      }
+
+      .header h2 {
+        color: #00ff00;
+        font-size: 18px;
+        font-weight: bold;
+        font-family: "Rubik", sans-serif;
+      }
+
+      .search-box {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+      }
+
+      .search-box input {
+        background-color: #00ff00;
+        border: none;
+        padding: 10px 15px;
+        color: #000;
+        font-size: 24px;
+        width: 60px;
+        cursor: pointer;
+      }
+
+      .wallet-title {
+        background-color: #1a1a1a;
+        color: #00ff00;
+        padding: 10px 20px;
+        border-bottom: 1px solid #00ff00;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .wallet-title .dots {
+        display: flex;
+        gap: 3px;
+      }
+
+      .wallet-title .dot {
+        width: 12px;
+        height: 12px;
+        background-color: #00ff00;
+        display: inline-block;
+        animation: blink 1s infinite;
+      }
+
+      @keyframes blink {
+        0%,
+        49% {
+          opacity: 1;
+        }
+        50%,
+        100% {
+          opacity: 0;
+        }
+      }
+
+      .wallet-title .controls {
+        color: #00ff00;
+        font-size: 18px;
+      }
+
+      body {
+        background-color: #1a1a1a;
+        color: #00ff00;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 16px;
+        line-height: 1.6;
+        margin-left: 0px;
+      }
+
+      .header p {
+        font-size: 12px;
+        color: #00cc00;
+      }
+
+      .divider {
+        border-top: 1px dashed #00ff00;
+        margin: 10px 0;
+      }
+
+      .section-title {
+        margin-top: 30px;
+        margin-bottom: 10px;
+        margin-left: 10px;
+      }
+
+      .blink-dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background-color: #00ff00;
+        margin-right: 5px;
+        animation: blink 1s infinite;
+        margin-left: 10px;
+      }
+
+      @keyframes blink {
+        0%,
+        49% {
+          opacity: 1;
+        }
+        50%,
+        100% {
+          opacity: 0;
+        }
+      }
+
+      .info-box {
+        background-color: #000;
+        border: 1px solid #00ff00;
+        padding: 15px;
+        margin-top: 20px;
+        margin-right: 141px;
+        margin-left: 141px;
+        margin-bottom: 20px;
+      }
+
+      .container {
+        padding-bottom: 100px;
+      }
+
+      .note {
+        margin: 20px 0;
+        padding-left: 94px;
+      }
+
+      .white-text {
+        color: #bababa;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        margin-right: 20px;
+        margin-left: 2px;
+        margin-bottom: 20px;
+        border: 2px solid #00ff00;
+      }
+
+      th,
+      td {
+        border: 1px solid #00ff00;
+        padding: 15px;
+        text-align: center;
+      }
+
+      th {
+        background-color: #0a0a0a;
+        font-weight: normal;
+        color: #bababa;
+      }
+
+      td {
+        background-color: #1a1a1a;
+      }
+
+      a {
+        color: #00ff00;
+        text-decoration: none;
+        word-break: break-all;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      .video-link {
+        color: #bababa;
+        margin: 15px 0;
+        display: block;
+      }
+
+      .corner-dot {
+        position: fixed;
+        width: 12px;
+        height: 12px;
+        background-color: #00ff00;
+        animation: blink 1s infinite;
+      }
+
+      .top-right {
+        top: 5px;
+        right: 10px;
+      }
+
+      .bottom-right {
+        bottom: 10px;
+        right: 10px;
+      }
+
+      .btn-secondary {
+        background-color: #0a0a0a;
+        color: #00ff00;
+        border: 1px solid #00ff00;
+        padding: 10px 20px;
+      }
+      .btn-secondary:hover {
+        background-color: #00ff00;
+        color: #0a0a0a;
+      }
+      .btn-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .settings-form {
+        display: grid;
+        gap: 16px;
+        margin: 24px 0;
+        text-align: left;
+        white-space: normal;
+        letter-spacing: normal;
+      }
+      .setting-row {
+        display: grid;
+        grid-template-columns: minmax(220px, 1fr) minmax(220px, 2fr);
+        gap: 12px;
+        align-items: center;
+      }
+      .settings-form select {
+        width: 100%;
+        min-height: 42px;
+        padding: 8px 12px;
+        border: 1px solid #00ff00;
+        border-radius: 0;
+        background-color: #0a0a0a;
+        color: #00ff00;
+        font: inherit;
+      }
+      .settings-form option {
+        background-color: #0a0a0a;
+        color: #00ff00;
+      }
+      .setting-row.checkbox-row {
+        grid-template-columns: 1fr;
+      }
+      .checkbox-setting {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .checkbox-setting input {
+        accent-color: #00ff00;
+        width: 18px;
+        height: 18px;
+      }
+      .settings-form button {
+        justify-self: start;
+      }
+      .save-status {
+        min-height: 1.4em;
+        margin: 0;
+      }
+      @media (max-width: 600px) {
+        .setting-row {
+          grid-template-columns: 1fr;
+          gap: 6px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="site-header">
+      <div class="header">
+        <h1>//<a href="index.html"> CANTAR EN LA RED DE BITCOIN [TO SING IN THE BITCOIN NETWORK]</a></h1>
+        <h2><s>// PARA PENSAR CON SATOSHIS [TO THINK WITH SATOSHIS]</s></h2>
+        <div class="search-box"><input type="button" value="🔍" /></div>
+      </div>
+    </div>
+    <div class="wallet-title">
+      <div>
+        <span>Electrum 4.6.2 - flower_wallet [standard]</span>
+        <span class="dots">
+          <span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span> <span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span> <span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span> <span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span> <span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span>
+        </span>
+      </div>
+      <div class="controls">- □ X</div>
+    </div>
+    <div class="container">
+      <div class="section-title">
+        <p><strong>//Ajustes [Settings]</strong></p>
+        <p><strong>10/31/2024</strong><br /></p>
+      </div>
+      <div class="blink-dot"></div>
+      <div class="info-box settings-panel">
+        <div class="btn-group" role="group" aria-label="Settings sections">
+          <a class="btn btn-secondary" href="settings.html">Appearance</a>
+          <a class="btn btn-secondary" href="Units.html"
+            >Units</a
+          >
+          <a
+            class="btn btn-secondary"
+            href="Fiat.html" aria-current="page"
+            >Fiat</a
+          >
+          <a
+            class="btn btn-secondary"
+            href="Lightning.html"
+            >Lightning</a
+          >
+        </div>
+        <form class="settings-form" id="units-form">
+          <div class="setting-row">
+            <label for="base-unit">Moneda fiat [Fiat currency]:</label>
+            <select name="base-unit" id="base-unit">
+              <option value="BTC" selected>EUR</option>
+              <option value="mBTC">USD</option>
+              <option value="bits">GBP</option>
+              <option value="sat">JPY</option>
+				<option value="mBTC">CHF</option>
+              <option value="bits">CUP</option>
+              <option value="sat">MXN</option>
+				<option value="mBTC">VES</option>
+              <option value="bits">ARS</option>
+              <option value="sat">CLP</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <label for="decimal-zeros"
+              >Código fuente [Source code]:</label
+            >
+            <select name="decimal-zeros" id="decimal-zeros">
+              <option value="0">CoinGecko</option>
+              <option value="1">BitPay</option>
+              <option value="2">BitStamp</option>
+              <option value="3">BitcoinAverange</option>
+              <option value="4">BitcoinVenezuela</option>
+              <option value="5">BlockchainInfo</option>
+              <option value="6">CoinDesk</option>
+              <option value="7">CoinBase</option>
+			  <option value="8">Yadio</option>
+              <option value="9" selected>Kraken</option>
+            </select>
+          </div>
+          <div class="setting-row checkbox-row">
+            <label class="checkbox-setting" for="lightning-msat">
+              <input
+                type="checkbox"
+                name="lightning-msat"
+                id="lightning-msat"
+              />
+              <span>Descargue el historial de tasas</span>
+            </label>
+          </div>
+          <p
+            id="save-status"
+            class="save-status"
+            role="status"
+            aria-live="polite"
+          ></p>
+          <button type="submit" class="btn btn-secondary">Save</button>
+        </form>
+      </div>
+      <div class="footer">
+        <div>Balance: 0.00014470 BTC (11.09 EUR) 1 BTC~76,630.42 EUR</div>
+        <div class="footer-right">
+          <span>The update of Electrum 4.6.3 will be available soon</span>
+          <span class="footer-icon"><a href="Password.html">🔒</a></span>
+          <span class="footer-icon"><a href="settings.html">🛠️</a></span>
+          <span class="footer-icon"><a href="semilla.html">🌱</a></span
+          ><span class="footer-icon"><a href="Game.html">🟢</a></span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

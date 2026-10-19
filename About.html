@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Romanche song</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="search.js" defer></script>
+    <style type="text/css">
+      .cursor {
+        display: inline-block;
+        width: 8px;
+        height: 12px;
+        background-color: #00ff00;
+        animation: blink 1s infinite;
+        vertical-align: middle;
+      }
+      .date1 {
+        margin-top: 10px;
+        margin-bottom: 30px;
+      }
+      .about-columns {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 40px;
+        margin-top: 20px;
+        line-height: 1.8;
+      }
+      .about-columns p {
+        margin-bottom: 24px;
+      }
+      @media (max-width: 700px) {
+        .about-columns {
+          grid-template-columns: 1fr;
+          gap: 0;
+        }
+      }
+    </style>
+    <script>
+      async function loadHeader() {
+        const placeholder = document.getElementById("site-header");
+        const fallback = `
+          <div class="header">
+            <h1>//<a href="index.html"> CANTAR EN LA RED DE BITCOIN [TO SING IN THE BITCOIN NETWORK]</a></h1>
+            <h2><s>// PARA PENSAR CON SATOSHIS [TO THINK WITH SATOSHIS]</s></h2>
+            <div class="search-box"><input type="button" value="🔍" /></div>
+          </div>`;
+
+        try {
+          const res = await fetch("header.html", { cache: "no-cache" });
+          if (!res.ok) {
+            placeholder.innerHTML = fallback;
+            return;
+          }
+          const html = await res.text();
+          placeholder.innerHTML = html;
+        } catch (e) {
+          console.warn("Header include failed, using fallback", e);
+          placeholder.innerHTML = fallback;
+        }
+      }
+      document.addEventListener("DOMContentLoaded", loadHeader);
+
+      // Fetch real-time Bitcoin price from CoinGecko API
+      async function updateBitcoinPrice() {
+        try {
+          const response = await fetch(
+            "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd"
+          );
+          const data = await response.json();
+
+          if (data.bitcoin && data.bitcoin.usd) {
+            // Convert USD to EUR (approximate rate)
+            const usdToEurRate = 0.92; // Approximate conversion rate
+            const priceUSD = data.bitcoin.usd;
+            const priceEUR = (priceUSD * usdToEurRate).toFixed(2);
+
+            // Update the footer price display
+            const footerDiv = document.querySelector(".footer div:first-child");
+            if (footerDiv) {
+              // Calculate BTC balance in EUR (using existing balance of 0.00014470 BTC)
+              const btcBalance = 0.0001447;
+              const balanceEUR = (btcBalance * priceEUR).toFixed(2);
+              footerDiv.textContent = `Balance: 0.00014470 BTC (${balanceEUR} EUR) 1 BTC~${priceEUR} EUR`;
+
+              // Apply fade flicker animation
+              footerDiv.classList.remove("price-update");
+              void footerDiv.offsetWidth; // Trigger reflow to restart animation
+              footerDiv.classList.add("price-update");
+            }
+
+            // Update the status bar price display
+            const statusLeft = document.querySelector(".status-left");
+            if (statusLeft) {
+              const btcBalance2 = 0.000154;
+              const balanceEUR2 = (btcBalance2 * priceEUR).toFixed(2);
+              statusLeft.textContent = `Saldo: 0.00015400 BTC (${balanceEUR2} EUR) 1 BTC=${priceEUR} EUR`;
+
+              // Apply fade flicker animation
+              statusLeft.classList.remove("price-update");
+              void statusLeft.offsetWidth; // Trigger reflow to restart animation
+              statusLeft.classList.add("price-update");
+            }
+          }
+        } catch (e) {
+          console.warn("Failed to fetch Bitcoin price", e);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        loadHeader();
+        updateBitcoinPrice();
+
+        // Update price every 2 minutes (120000 milliseconds)
+        setInterval(updateBitcoinPrice, 120000);
+      });
+    </script>
+  </head>
+  <body>
+    <div id="site-header">
+      <div class="header">
+        <h1>//<a href="index.html"> CANTAR EN LA RED DE BITCOIN [TO SING IN THE BITCOIN NETWORK]</a></h1>
+        <h2><s>// PARA PENSAR CON SATOSHIS [TO THINK WITH SATOSHIS]</s></h2>
+        <div class="search-box">
+          <input
+            type="search"
+            id="search-input"
+            placeholder="Buscar en esta página..."
+          />
+          <button onclick="buscarEnPagina()">🔍</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function buscarEnPagina() {
+        const texto = document.getElementById("search-input").value;
+        if (texto) {
+          window.find(texto);
+        }
+      }
+    </script>
+
+    <div class="wallet-title">
+      <div>
+        <span>Electrum 4.6.2 - flower_wallet [standard]</span>
+        <span class="dots">
+          <span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span>
+        </span>
+      </div>
+      <div class="controls">- □ X</div>
+    </div>
+
+    <div class="container">
+  <div class="content">
+        <div class="subtitle">//Sobre [About]</div>
+        <div class="date">28/10/2024 <span class="cursor"></span></div>
+
+        <div class="about-columns">
+          <div>
+            <p>
+              <strong>//Cantar en la Blockchain.</strong> Para pensar con
+              satoshis, <strong>[Singing in the Bitcoin blockchain]</strong> is
+              a conceptual and performative art project that reflects on the
+              care of cultural memory.
+            </p>
+			  
+            <p>
+              //Through the minting of fragments of lullabies within economic
+              transactions on the Bitcoin blockchain, the project aims to rescue
+              local stories, memories, languages and almost forgotten songs as
+              an act of resilience within a feminist angle.
+            </p>
+			  
+          </div>
+          <div>
+            <p>
+              //Remembering the power that a public blockchain ecosystem
+              provides to people like decentralization, traceability,
+              transparency and immutability as a network resistant to
+              censorship. This project aims to preserve the traces of cultural
+              diversity transmitted between generations through motherhood.
+            </p>
+            <p>
+              //The use of this methodology (minting encrypted messages within
+              irreversible transactions) seeks to rescue from oblivion one of
+              the first symbolic and activist art practices that began in the
+              Bitcoin blockchain before its capitalisation. Applying this
+              practice is also to remember the anarchist political principles
+              that gave way to the emergence of this technology since the
+              1990s. It is also a political – feminist action that pursues the
+              preservation of cultural heritage diversity. Blockchain is a
+              medium for preserving digital memory, leaving tracks that can not
+              be erased after been deployed on it.
+            </p>
+          </div>
+        </div>
+        <div class="about-columns">
+          <div>
+            <p>
+              <strong>//The performance</strong> </p>  
+		    <p>// It consists of performing a lullaby between two wallets through the action of sending economic transactions between them while storing a coding message (fragments of the lullaby) in satoshis (the smallest unit of Bitcoin currency). This practice rescues the command script(OP_RETURN …), one of the first artistic performative practices within the crypto art.&nbsp;</p>
+			  <p>//Each page represents a track of the action performed. It is done mostly in solitude. Although, it invites other peers to contribute with their experiences.</p>
+          </div>
+          <div>
+            <strong><img src="img/ASCII-art-(5).png" width="693" height="697" alt=""/></strong>  
+          </div>
+        </div>
+   <div class="about-columns">
+          <div>
+          </div>
+     <div>
+            <p>
+              //TEAM  <span class="cursor"></span>
+            </p>				
+
+            <p>
+              //,.-*~ 𝕒เⓢş𝐀 ~*- multimedia artist interested in memory, cybernetics, activism and divination.
+            </p>
+		 <span class="cursor"></span>
+     </div>
+      <img src="img/ASCII-art-(6).png" alt="" width="693" height="153"/>
+    </div>
+	   <div>
+      <a href="index.html" class="toolbar-btn">
+        <span class="toolbar-icon">🖥️</span>
+        Historial
+      </a>
+      <a href="Nota.html" class="toolbar-btn">
+        <span class="toolbar-icon">📋</span>
+        Essay
+      </a>
+      <a href="mempool.html" class="toolbar-btn">
+        <span class="toolbar-icon">🛝</span>
+        Mempool
+      </a>
+    </div>
+    <p class="spaced-cursor"><span class="cursor"></span></p>
+     </div>
+      <div class="footer">
+        <div>Balance: 0.00014470 BTC (11.09 EUR) 1 BTC~76,630.42 EUR</div>
+        <div class="footer-right">
+          <span class="blink-dot"></span>
+          <span>The update of Electrum 4.6.3 will be available soon</span>
+          <span class="footer-icon"><a href="Password.html">🔒</a></span>
+          <span class="footer-icon"><a href="settings.html">🛠️</a></span>
+          <span class="footer-icon"><a href="semilla.html">🌱</a></span
+          ><span class="footer-icon"><a href="Game.html">🟢</a></span>
+        </div>
+      </div>
+		</div>
+  </body>
+</html>

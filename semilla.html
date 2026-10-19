@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+  <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Cantar en la Red de Bitcoin</title>
+      <link rel="stylesheet" href="styles.css" />
+      <script src="search.js" defer></script>
+      <script>
+        // Load shared header fragment into pages. If fetch fails (for example
+        // when opened via file://), insert a minimal fallback header so the
+        // page still shows a proper header.
+        async function loadHeader() {
+          const placeholder = document.getElementById("site-header");
+          const fallback = `
+          <div class="header">
+            <h1>//<a href="index.html"> CANTAR EN LA RED DE BITCOIN [TO SING IN THE BITCOIN NETWORK]</a></h1>
+            <h2><s>// PARA PENSAR CON SATOSHIS [TO THINK WITH SATOSHIS]</s></h2>
+            <div class="search-box"><input type="button" value="🔍" /></div>
+          </div>`;
+
+          try {
+            const res = await fetch("header.html", { cache: "no-cache" });
+            if (!res.ok) {
+              placeholder.innerHTML = fallback;
+              return;
+            }
+            const html = await res.text();
+            placeholder.innerHTML = html;
+          } catch (e) {
+            console.warn("Header include failed, using fallback", e);
+            placeholder.innerHTML = fallback;
+          }
+        }
+        document.addEventListener("DOMContentLoaded", loadHeader);
+
+        // Fetch real-time Bitcoin price from CoinGecko API
+        async function updateBitcoinPrice() {
+          try {
+            const response = await fetch(
+              "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd",
+            );
+            const data = await response.json();
+
+            if (data.bitcoin && data.bitcoin.usd) {
+              // Convert USD to EUR (approximate rate)
+              const usdToEurRate = 0.92; // Approximate conversion rate
+              const priceUSD = data.bitcoin.usd;
+              const priceEUR = (priceUSD * usdToEurRate).toFixed(2);
+
+              // Update the footer price display
+              const footerDiv = document.querySelector(
+                ".footer div:first-child",
+              );
+              if (footerDiv) {
+                // Calculate BTC balance in EUR (using existing balance of 0.00014470 BTC)
+                const btcBalance = 0.0001447;
+                const balanceEUR = (btcBalance * priceEUR).toFixed(2);
+                footerDiv.textContent = `Balance: 0.00014470 BTC (${balanceEUR} EUR) 1 BTC~${priceEUR} EUR`;
+
+                // Apply fade flicker animation
+                footerDiv.classList.remove("price-update");
+                void footerDiv.offsetWidth; // Trigger reflow to restart animation
+                footerDiv.classList.add("price-update");
+              }
+
+              // Update the status bar price display
+              const statusLeft = document.querySelector(".status-left");
+              if (statusLeft) {
+                const btcBalance2 = 0.000154;
+                const balanceEUR2 = (btcBalance2 * priceEUR).toFixed(2);
+                statusLeft.textContent = `Saldo: 0.00015400 BTC (${balanceEUR2} EUR) 1 BTC=${priceEUR} EUR`;
+
+                // Apply fade flicker animation
+                statusLeft.classList.remove("price-update");
+                void statusLeft.offsetWidth; // Trigger reflow to restart animation
+                statusLeft.classList.add("price-update");
+              }
+            }
+          } catch (e) {
+            console.warn("Failed to fetch Bitcoin price", e);
+          }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+          loadHeader();
+          updateBitcoinPrice();
+
+          // Update price every 2 minutes (120000 milliseconds)
+          setInterval(updateBitcoinPrice, 120000);
+        });
+      </script>
+      <style>
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        .header {
+          background-color: #2b2b2b;
+          padding: 15px 20px;
+          border-bottom: 2px dotted #00ff00;
+        }
+
+        .header h1 {
+          color: #00ff00;
+          font-size: 24px;
+          font-weight: bold;
+          margin-bottom: 5px;
+          font-family: "Rubik", sans-serif;
+        }
+
+        .header h2 {
+          color: #00ff00;
+          font-size: 18px;
+          font-weight: bold;
+          font-family: "Rubik", sans-serif;
+        }
+
+        .search-box {
+          position: absolute;
+          top: 10px;
+          right: 20px;
+        }
+
+        .search-box input {
+          background-color: #00ff00;
+          border: none;
+          padding: 10px 15px;
+          color: #000;
+          font-size: 24px;
+          width: 60px;
+          cursor: pointer;
+        }
+
+        .wallet-title {
+          background-color: #1a1a1a;
+          color: #00ff00;
+          padding: 10px 20px;
+          border-bottom: 1px solid #00ff00;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .wallet-title .dots {
+          display: flex;
+          gap: 3px;
+        }
+
+        .wallet-title .dot {
+          width: 12px;
+          height: 12px;
+          background-color: #00ff00;
+          display: inline-block;
+          animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+          0%,
+          49% {
+            opacity: 1;
+          }
+          50%,
+          100% {
+            opacity: 0;
+          }
+        }
+
+        .wallet-title .controls {
+          color: #00ff00;
+          font-size: 18px;
+        }
+
+        body {
+          background-color: #1a1a1a;
+          color: #00ff00;
+          font-family: "JetBrains Mono", monospace;
+          font-size: 16px;
+          line-height: 1.6;
+          margin-left: 0px;
+        }
+
+        .header p {
+          font-size: 12px;
+          color: #00cc00;
+        }
+
+        .divider {
+          border-top: 1px dashed #00ff00;
+          margin: 10px 0;
+        }
+
+        .section-title {
+          margin-top: 30px;
+          margin-bottom: 10px;
+          margin-left: 10px;
+        }
+
+        .blink-dot {
+          display: inline-block;
+          width: 8px;
+          height: 8px;
+          background-color: #00ff00;
+          margin-right: 5px;
+          animation: blink 1s infinite;
+          margin-left: 10px;
+        }
+
+        @keyframes blink {
+          0%,
+          49% {
+            opacity: 1;
+          }
+          50%,
+          100% {
+            opacity: 0;
+          }
+        }
+
+        .game-container {
+          display: flex;
+          justify-content: center;
+          width: 100%;
+          margin-top: 20px;
+          margin-bottom: 20px;
+        }
+
+        .snake-game-frame {
+          width: 502px;
+          height: 502px;
+          border: 1px solid #00ff00;
+        }
+
+        .snake-game {
+          display: block;
+          width: 100%;
+          height: 100%;
+          border: 0;
+        }
+
+        .note {
+          margin: 20px 0;
+          padding-left: 94px;
+        }
+
+        .white-text {
+          color: #bababa;
+        }
+
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 20px;
+          margin-right: 20px;
+          margin-left: 2px;
+          margin-bottom: 20px;
+          border: 2px solid #00ff00;
+        }
+
+        th,
+        td {
+          border: 1px solid #00ff00;
+          padding: 15px;
+          text-align: center;
+        }
+
+        th {
+          background-color: #0a0a0a;
+          font-weight: normal;
+          color: #bababa;
+        }
+
+        td {
+          background-color: #1a1a1a;
+        }
+
+        a {
+          color: #00ff00;
+          text-decoration: none;
+          word-break: break-all;
+        }
+
+        a:hover {
+          text-decoration: underline;
+        }
+
+        .video-link {
+          color: #bababa;
+          margin: 15px 0;
+          display: block;
+        }
+
+        .corner-dot {
+          position: fixed;
+          width: 12px;
+          height: 12px;
+          background-color: #00ff00;
+          animation: blink 1s infinite;
+        }
+
+        .top-right {
+          top: 5px;
+          right: 10px;
+        }
+
+        .bottom-right {
+          bottom: 10px;
+          right: 10px;
+        }
+
+        @keyframes fadeFlicker {
+          0% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0.3;
+          }
+          100% {
+            opacity: 1;
+          }
+        }
+
+        .price-update {
+          animation: fadeFlicker 0.6s ease-in-out;
+        }
+      </style>
+    </head>
+    <body>
+      <div id="site-header">
+        <div class="header">
+          <h1>//<a href="index.html"> CANTAR EN LA RED DE BITCOIN [TO SING IN THE BITCOIN NETWORK]</a></h1>
+          <h2><s>// PARA PENSAR CON SATOSHIS [TO THINK WITH SATOSHIS]</s></h2>
+          <div class="search-box"><input type="button" value="🔍" /></div>
+        </div>
+      </div>
+      <div class="wallet-title">
+        <div>
+          <span>Electrum 4.6.2 - flower_wallet [standard]</span>
+          <span class="dots">
+            <span class="dot"></span><span class="dot"></span
+            ><span class="dot"></span><span class="dot"></span
+            ><span class="dot"></span> <span class="dot"></span
+            ><span class="dot"></span><span class="dot"></span
+            ><span class="dot"></span><span class="dot"></span>
+            <span class="dot"></span><span class="dot"></span
+            ><span class="dot"></span><span class="dot"></span
+            ><span class="dot"></span> <span class="dot"></span
+            ><span class="dot"></span><span class="dot"></span
+            ><span class="dot"></span><span class="dot"></span>
+            <span class="dot"></span><span class="dot"></span
+            ><span class="dot"></span><span class="dot"></span
+            ><span class="dot"></span> <span class="dot"></span
+            ><span class="dot"></span><span class="dot"></span
+            ><span class="dot"></span><span class="dot"></span>
+            <span class="dot"></span><span class="dot"></span
+            ><span class="dot"></span><span class="dot"></span
+            ><span class="dot"></span> <span class="dot"></span
+            ><span class="dot"></span><span class="dot"></span
+            ><span class="dot"></span><span class="dot"></span>
+            <span class="dot"></span><span class="dot"></span
+            ><span class="dot"></span><span class="dot"></span
+            ><span class="dot"></span>
+          </span>
+        </div>
+        <div class="controls">- □ X</div>
+      </div>
+      <div class="container">
+        <div class="section-title">
+          <p>
+            <strong>//Recupera tu semilla [recover your seed]&nbsp;</strong>
+          </p>
+          <p><strong>10/31/2024</strong><br /></p>
+        </div>
+        <div class="blink-dot"></div>
+        <div class="game-container">
+          <div class="snake-game-frame">
+            <iframe
+              class="snake-game"
+              src="Grove scar/Grove.html"
+              title="Juego de la serpiente"
+              loading="lazy"
+            ></iframe>
+          </div>
+        </div>
+
+        <br />
+        <div class="blink-dot"></div>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <div class="footer">
+          <div>Balance: 0.00014470 BTC (11.09 EUR) 1 BTC~76,630.42 EUR</div>
+          <div class="footer-right">
+            <span>The update of Electrum 4.6.3 will be available soon</span>
+            <span class="footer-icon"><a href="Password.html">🔒</a></span>
+            <span class="footer-icon"><a href="settings.html">🛠️</a></span>
+            <span class="footer-icon"><a href="semilla.html">🌱</a></span
+            ><span class="footer-icon"><a href="Game.html">🟢</a></span>
+          </div>
+        </div>
+      </div>
+    </body>
+</html>

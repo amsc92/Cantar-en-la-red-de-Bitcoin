@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cantar en la Red de Bitcoin</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="search.js" defer></script>
+    <script>
+      // Load shared header fragment into pages. If fetch fails (for example
+      // when opened via file://), insert a minimal fallback header so the
+      // page still shows a proper header.
+      async function loadHeader() {
+        const placeholder = document.getElementById("site-header");
+        const fallback = `
+          <div class="header">
+            <h1>//<a href="index.html"> CANTAR EN LA RED DE BITCOIN [TO SING IN THE BITCOIN NETWORK]</a></h1>
+            <h2><s>// PARA PENSAR CON SATOSHIS [TO THINK WITH SATOSHIS]</s></h2>
+            <div class="search-box"><input type="button" value="🔍" /></div>
+          </div>`;
+
+        try {
+          const res = await fetch("header.html", { cache: "no-cache" });
+          if (!res.ok) {
+            placeholder.innerHTML = fallback;
+            return;
+          }
+          const html = await res.text();
+          placeholder.innerHTML = html;
+        } catch (e) {
+          console.warn("Header include failed, using fallback", e);
+          placeholder.innerHTML = fallback;
+        }
+      }
+      document.addEventListener("DOMContentLoaded", loadHeader);
+		
+		   // Fetch real-time Bitcoin price from CoinGecko API
+      async function updateBitcoinPrice() {
+        try {
+          const response = await fetch(
+            "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd"
+          );
+          const data = await response.json();
+
+          if (data.bitcoin && data.bitcoin.usd) {
+            // Convert USD to EUR (approximate rate)
+            const usdToEurRate = 0.92; // Approximate conversion rate
+            const priceUSD = data.bitcoin.usd;
+            const priceEUR = (priceUSD * usdToEurRate).toFixed(2);
+
+            // Update the footer price display
+            const footerDiv = document.querySelector(".footer div:first-child");
+            if (footerDiv) {
+              // Calculate BTC balance in EUR (using existing balance of 0.00014470 BTC)
+              const btcBalance = 0.0001447;
+              const balanceEUR = (btcBalance * priceEUR).toFixed(2);
+              footerDiv.textContent = `Balance: 0.00014470 BTC (${balanceEUR} EUR) 1 BTC~${priceEUR} EUR`;
+
+              // Apply fade flicker animation
+              footerDiv.classList.remove("price-update");
+              void footerDiv.offsetWidth; // Trigger reflow to restart animation
+              footerDiv.classList.add("price-update");
+            }
+
+            // Update the status bar price display
+            const statusLeft = document.querySelector(".status-left");
+            if (statusLeft) {
+              const btcBalance2 = 0.000154;
+              const balanceEUR2 = (btcBalance2 * priceEUR).toFixed(2);
+              statusLeft.textContent = `Saldo: 0.00015400 BTC (${balanceEUR2} EUR) 1 BTC=${priceEUR} EUR`;
+
+              // Apply fade flicker animation
+              statusLeft.classList.remove("price-update");
+              void statusLeft.offsetWidth; // Trigger reflow to restart animation
+              statusLeft.classList.add("price-update");
+            }
+          }
+        } catch (e) {
+          console.warn("Failed to fetch Bitcoin price", e);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        loadHeader();
+        updateBitcoinPrice();
+
+        // Update price every 2 minutes (120000 milliseconds)
+        setInterval(updateBitcoinPrice, 120000);
+      });
+    </script>
+    <style>
+      * 
+		{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      .header {
+        background-color: #2b2b2b;
+        padding: 15px 20px;
+        border-bottom: 2px dotted #00ff00;
+      }
+
+      .header h1 {
+        color: #00ff00;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        font-family: 'Rubik', sans-serif;
+      }
+
+      .header h2 {
+        color: #00ff00;
+        font-size: 18px;
+        font-weight: bold;
+        font-family: 'Rubik', sans-serif;
+      }
+
+      .search-box {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+      }
+
+      .search-box input {
+        background-color: #00ff00;
+        border: none;
+        padding: 10px 15px;
+        color: #000;
+        font-size: 24px;
+        width: 60px;
+        cursor: pointer;
+      }
+
+     .wallet-title {
+        background-color: #1a1a1a;
+        color: #00ff00;
+        padding: 10px 20px;
+        border-bottom: 1px solid #00ff00;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .wallet-title .dots {
+        display: flex;
+        gap: 3px;
+      }
+
+      .wallet-title .dot {
+        width: 12px;
+        height: 12px;
+        background-color: #00ff00;
+        display: inline-block;
+        animation: blink 1s infinite;
+      }
+
+      @keyframes blink {
+        0%,
+        49% {
+          opacity: 1;
+        }
+        50%,
+        100% {
+          opacity: 0;
+        }
+      }
+
+      .wallet-title .controls {
+        color: #00ff00;
+        font-size: 18px;
+      }
+
+   
+        body {
+    background-color: #1a1a1a;
+    color: #00ff00;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-left: 0px;
+        }
+
+        .header p {
+            font-size: 12px;
+            color: #00cc00;
+        }
+
+        .divider {
+            border-top: 1px dashed #00ff00;
+            margin: 10px 0;
+        }
+
+        .section-title {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+        }
+
+        .blink-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #00ff00;
+    margin-right: 5px;
+    animation: blink 1s infinite;
+    margin-left: 10px;
+        }
+
+        @keyframes blink {
+            0%, 49% {
+                opacity: 1;
+            }
+            50%, 100% {
+                opacity: 0;
+            }
+        }
+
+        .info-box {
+    background-color: #0a0a0a;
+    border: 1px solid #00ff00;
+    padding: 15px;
+    margin-top: 20px;
+    margin-right: 141px;
+    margin-left: 141px;
+    margin-bottom: 20px;
+        }
+
+        .note {
+    margin: 20px 0;
+    padding-left: 94px;
+        }
+
+        .white-text {
+            color: #bababa;
+        }
+
+        table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    margin-right: 20px;
+    margin-left: 2px;
+    margin-bottom: 20px;
+    border: 2px solid #00ff00;
+        }
+
+        th, td {
+            border: 1px solid #00ff00;
+            padding: 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #0a0a0a;
+            font-weight: normal;
+            color: #bababa;
+        }
+
+        td {
+            background-color: #1a1a1a;
+        }
+
+        a {
+            color: #00ff00;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .video-link {
+            color: #bababa;
+            margin: 15px 0;
+            display: block;
+        }
+
+        .corner-dot {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            background-color: #00ff00;
+            animation: blink 1s infinite;
+        }
+
+        .top-right {
+            top: 5px;
+            right: 10px;
+        }
+
+        .bottom-right {
+            bottom: 10px;
+            right: 10px;
+        }
+		
+      @keyframes fadeFlicker {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      .price-update {
+        animation: fadeFlicker 0.6s ease-in-out;
+      }
+
+    </style>
+</head>
+<body>
+<div id="site-header">
+	 <div class="header">
+            <h1>//<a href="index.html"> CANTAR EN LA RED DE BITCOIN [TO SING IN THE BITCOIN NETWORK]</a></h1>
+            <h2><s>// PARA PENSAR CON SATOSHIS [TO THINK WITH SATOSHIS]</s></h2>
+            <div class="search-box"><input type="button" value="🔍" /></div>
+          </div>
+	</div>
+<div class="wallet-title">
+      <div>
+        <span>Electrum 4.6.2 - flower_wallet [standard]</span>
+        <span class="dots">
+          <span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span> <span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span> <span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span> <span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span> <span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span>
+        </span>
+      </div>
+      <div class="controls">- □ X</div>
+    </div>
+ <div class="container">
+	 <div class="section-title"> <strong>//MEMPOOL</strong><br>
+</div>
+<div class="blink-dot"></div>
+    <div class="info-box">
+        <p> <strong>ABOUT THE MEMPOOL?&nbsp;</strong></p>
+      <p><strong>&nbsp;</strong> </p>
+      <p>/*</p>
+        <p>Mempool is a Bitcoin blockchain explorer focused on the transaction fee market and in the multi-layered ecosystem.</p>
+        <p>&nbsp;It is completely self-hosted without trusted third parties. One of its uses is the tracking and visibility of transactions made and pending.</p>
+        <p>*/&nbsp;</p>
+
+    </div>
+
+    <div class="note">
+      <p>&nbsp;</p>
+      <p>//Through this browser we will view the messages hidden in the Bitcoin blockchain by clicking on the corresponding link. I recommend once in the mempool, to display the content of "Details" to enjoy better readability.</p>
+    </div>
+
+    <div class="blink-dot"></div>
+
+    <div class="note">
+        <p>//Messages are written in the process of sending a transfer from one Electrum wallet to another using the command <span class="white-text">script (OP_RETURN....)</span>.</p>
+        <p>//The messages are originally encoded in HEX, their decoding version are visible through the interface of the Mempool. Because such operations cannot have an excessive weight, the message encrypted is subject to less than 340 HEX characters. So the texts should be short.</p>
+    </div>
+
+<div class="blink-dot"></div>
+
+<table>
+        <thead>
+            <tr>
+                <th>&nbsp; &nbsp; Description</th>
+                <th>Link to the Mempool</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>&nbsp; &nbsp; Nana afrocubana [Afro Cuban lullaby] (part.1)</td>
+                <td><a href="https://mempool.space/es/tx/35414c032904371e268f8f6d0987c342f9fbfb67cc4fc3db3f2146ed5b74e50a">35414c032904371e268f8f6d0987c342f9fbfb67cc4fc3db3f2146ed5b74e50a</a></td>
+            </tr>
+            <tr>
+                <td>&nbsp; &nbsp; Nana afrocubana [Afro Cuban lullaby] (part.2)</td>
+                <td><a href="https://mempool.space/es/tx/568e0e9d3727778c78b5c4949f5270358abf85473ebea159e4928cd41fc41f7e">568e0e9d3727778c78b5c4949f5270358abf85473ebea159e4928cd41fc41f7e</a></td>
+            </tr>
+            <tr>
+                <td>&nbsp; &nbsp; Nana afrocubana [Afro Cuban lullaby] (part.3)</td>
+                <td><a href="https://mempool.space/es/tx/1347a0c804f629ad6fbbd335827abfe550178d2489e382c61b9ce465b693c8e3">1347a0c804f629ad6fbbd335827abfe550178d2489e382c61b9ce465b693c8e3</a></td>
+            </tr>
+        </tbody>
+</table>
+<p>&nbsp;</p>
+<br>
+<table>
+  <thead>
+    <tr>
+      <th>&nbsp; &nbsp; Description</th>
+      <th>Link to the Mempool</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>&nbsp; Canción de montaña romanche [A Romansch mountain song] (part.1)</td>
+      <td><a href="https://mempool.space/es/tx/a818bd9e48fab3ac09c23eeaf20031ba0706e3081c77aad96ddd2cf6d9f18b2a">a818bd9e48fab3ac09c23eeaf20031ba0706e3081c77aad96ddd2cf6d9f18b2a</a></td>
+    </tr>
+    <tr>
+      <td>&nbsp; &nbsp;Canción de montaña romanche [A Romansch mountain song] (part.2)</td>
+      <td><a href="https://mempool.space/es/tx/b33b442e16ae271a996e263b4b2a65015eb97da6bc40ebf578c1497962e35aeb">b33b442e16ae271a996e263b4b2a65015eb97da6bc40ebf578c1497962e35aeb</a></td>
+    </tr>
+    <tr>
+      <td>&nbsp; Canción de montaña romanche [A Romansch mountain song](part.3)</td>
+      <td><a href="https://mempool.space/es/tx/1e5cbfa56bfb81a40396824bc4a18af54dc42bc44d0926fe2f994fa649466092">1e5cbfa56bfb81a40396824bc4a18af54dc42bc44d0926fe2f994fa649466092</a></td>
+    </tr>
+  </tbody>
+</table>
+	 <p>&nbsp;</p>
+	 <br>
+	 <table>
+        <thead>
+            <tr>
+                <th>&nbsp; &nbsp; Description</th>
+                <th>Link to the Mempool</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Nana Nathual [Nathual lullaby](part.1)</td>
+                <td><a href="https://mempool.space/es/tx/3780e40043692912e991968f746bb3ddce60844b9ea37fab38fa64ecb474f881">3780e40043692912e991968f746bb3ddce60844b9ea37fab38fa64ecb474f881</a></td>
+            </tr>
+            <tr>
+                <td>Nana Nathual [Nathual lullaby](part.2)</td>
+                <td><a href="https://mempool.space/es/tx/4c71bbb41113019505764a95f7b82a631419d4c2cc8e30d6f73a241e19fd37cd">4c71bbb41113019505764a95f7b82a631419d4c2cc8e30d6f73a241e19fd37cd</a></td>
+            </tr>
+            <tr>
+                <td>&nbsp; &nbsp;Nana Nathual [Nathual lullaby](part.3)</td>
+                <td><a href="https://mempool.space/es/tx/cf99c4e248078c820a3e047305d82f18852393ba00cc0e3cb46ab9ed2501a7c3">cf99c4e248078c820a3e047305d82f18852393ba00cc0e3cb46ab9ed2501a7c3</a></td>
+            </tr>
+        </tbody>
+</table>
+<br>
+<table>
+  <thead>
+    <tr>
+      <th>&nbsp; &nbsp; Description</th>
+      <th>Link to the Mempool</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>&nbsp; Nana Haitiana [Haitian lullaby](part.1)</td>
+      <td><a href="https://mempool.space/es/tx/12cb52dbbb26426d573a018428bb7cd7dd45e6df7ebe32ba53f459268cf09f92">12cb52dbbb26426d573a018428bb7cd7dd45e6df7ebe32ba53f459268cf09f92</a></td>
+    </tr>
+    <tr>
+      <td>&nbsp; &nbsp;Nana Haitiana [Haitian lullaby](part.2)</td>
+      <td><a href="https://mempool.space/es/tx/f31dd43d86532b2e7d614401e5d4c64ee20a36707aa98d05fe7ec1e29589a60e">f31dd43d86532b2e7d614401e5d4c64ee20a36707aa98d05fe7ec1e29589a60e</a></td>
+    </tr>
+    <tr>
+      <td>&nbsp;Nana Haitiana [Haitian lullaby](part.3)</td>
+      <td><a href="https://mempool.space/es/tx/25314cb42699bce9773f195b06fe26e43ad21275b7e4e04c491d8127203c4048">25314cb42699bce9773f195b06fe26e43ad21275b7e4e04c491d8127203c4048</a></td>
+    </tr>
+  </tbody>
+</table>
+	 <br>
+<table>
+  <thead>
+    <tr>
+      <th>&nbsp; &nbsp; Description</th>
+      <th>Link to the Mempool</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>&nbsp;  Nana Malgache [Malagasy lullaby](part.1)</td>
+      <td><a href="https://mempool.space/es/tx/35933a86f5b1b78105c650ba9ddd770881f4bde6e6958a4696c191b875d951fd">35933a86f5b1b78105c650ba9ddd770881f4bde6e6958a4696c191b875d951fd</a></td>
+    </tr>
+    <tr>
+      <td>&nbsp; &nbsp;Nana Malgache [Malagasy lullaby](part.2)</td>
+      <td><a href="https://mempool.space/es/tx/8e71aa46969fb4ec1c80806d17fdfa1461beb517c969fd5487119755e988cd61">8e71aa46969fb4ec1c80806d17fdfa1461beb517c969fd5487119755e988cd61</a></td>
+    </tr>
+  </tbody>
+</table>
+	 <br>
+	 <table>
+  <thead>
+    <tr>
+      <th>&nbsp; &nbsp; Description</th>
+      <th>Link to the Mempool</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>&nbsp;  Nana Telugu [Telugu lullaby](part.1)</td>
+      <td><a href="https://mempool.space/es/tx/9822f37b39ad43ebe3e7d1d0f1d0450197e18e9eb4f2acb8053e289fa2ff40f4">9822f37b39ad43ebe3e7d1d0f1d0450197e18e9eb4f2acb8053e289fa2ff40f4</a></td>
+    </tr>
+    <tr>
+      <td>&nbsp; &nbsp;Nana Telugu [Telugu lullaby](part.2)</td>
+      <td><a href="https://mempool.space/es/tx/a960b011f598be1f8d762948744e9d5ff3cd130f746b59206f2ce8c0a9fc47af">a960b011f598be1f8d762948744e9d5ff3cd130f746b59206f2ce8c0a9fc47af</a></td>
+    </tr>
+	   <tr>
+      <td>&nbsp; &nbsp;Nana Telugu [Telugu lullaby](part.3)</td>
+      <td><a href="https://mempool.space/es/tx/0b79307724f2d212b15676de46cff019bd67a0eb2e6d0269335238befdefa524">0b79307724f2d212b15676de46cff019bd67a0eb2e6d0269335238befdefa524</a></td>	
+    </tr>
+	   <tr>
+      <td>&nbsp; &nbsp;Nana Telugu [Telugu lullaby](part.4)</td>
+      <td><a href="https://mempool.space/es/tx/a944fd73b05b01df229bb6a053356762b9bb6f4fd598ffdeacffb4a5653e843e">a944fd73b05b01df229bb6a053356762b9bb6f4fd598ffdeacffb4a5653e843e</a></td>
+    </tr>
+  </tbody>
+</table>
+	  <br>
+	 <table>
+  <thead>
+    <tr>
+	  <tr>
+      <th>&nbsp; &nbsp; Description</th>
+      <th>Link to the Mempool</th>
+    </tr>
+  <tbody>
+    <tr>
+      <td>Nana Quechua [Quechua lullaby](part.1)</td>
+      <td><a href="https://mempool.space/es/tx/d68b1e088cf88a69637719ed301742733481ed5e893353e71906d3b5b32ee6fb">d68b1e088cf88a69637719ed301742733481ed5e893353e71906d3b5b32ee6fb</a></td>
+    </tr>
+    <tr>
+      <td>Nana Quechua [Quechua lullaby](part.2)</td>
+      <td><a href="https://mempool.space/es/tx/9a62d8645eb6b8d302ca533c31cad63be6ef5466004a1f4db8377dc7737bb8d6">9a62d8645eb6b8d302ca533c31cad63be6ef5466004a1f4db8377dc7737bb8d6</a></td>
+      </tr>
+  </tbody>
+		   </tr>
+	   </thead>
+</table>
+	 <br>
+<div class="blink-dot"></div>
+
+<p>&nbsp; &nbsp; It is completely self-hosted without trusted third parties. One of its uses is the tracking and visibility of transactions made and pending. </p>
+    <p>&nbsp;</p>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	<div class="footer">
+      <div>Balance: 0.00014470 BTC (11.09 EUR) 1 BTC~76,630.42 EUR</div>
+      <div class="footer-right"> <span>The update of Electrum 4.6.3 will be available soon</span> 
+		  <span class="footer-icon"><a href="Password.html">🔒</a></span>
+          <span class="footer-icon"><a href="settings.html">🛠️</a></span>
+          <span class="footer-icon"><a href="semilla.html">🌱</a></span
+          ><span class="footer-icon"><a href="Game.html">🟢</a></span> </div>
+		</div>
+	 </div>
+</body>
+</html>

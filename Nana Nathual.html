@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Romanche song</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="search.js" defer></script>
+    <style type="text/css">
+      .cursor {
+        display: inline-block;
+        width: 8px;
+        height: 12px;
+        background-color: #00ff00;
+        animation: blink 1s infinite;
+        vertical-align: middle;
+      }
+      .date1 {
+        margin-top: 10px;
+        margin-bottom: 30px;
+      }
+    </style>
+    <script>
+      async function loadHeader() {
+        const placeholder = document.getElementById("site-header");
+        const fallback = `
+          <div class="header">
+            <h1>//<a href="index.html"> CANTAR EN LA RED DE BITCOIN [TO SING IN THE BITCOIN NETWORK]</a></h1>
+            <h2><s>// PARA PENSAR CON SATOSHIS [TO THINK WITH SATOSHIS]</s></h2>
+            <div class="search-box"><input type="button" value="🔍" /></div>
+          </div>`;
+
+        try {
+          const res = await fetch("header.html", { cache: "no-cache" });
+          if (!res.ok) {
+            placeholder.innerHTML = fallback;
+            return;
+          }
+          const html = await res.text();
+          placeholder.innerHTML = html;
+        } catch (e) {
+          console.warn("Header include failed, using fallback", e);
+          placeholder.innerHTML = fallback;
+        }
+      }
+      document.addEventListener("DOMContentLoaded", loadHeader);
+
+      // Fetch real-time Bitcoin price from CoinGecko API
+      async function updateBitcoinPrice() {
+        try {
+          const response = await fetch(
+            "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd"
+          );
+          const data = await response.json();
+
+          if (data.bitcoin && data.bitcoin.usd) {
+            // Convert USD to EUR (approximate rate)
+            const usdToEurRate = 0.92; // Approximate conversion rate
+            const priceUSD = data.bitcoin.usd;
+            const priceEUR = (priceUSD * usdToEurRate).toFixed(2);
+
+            // Update the footer price display
+            const footerDiv = document.querySelector(".footer div:first-child");
+            if (footerDiv) {
+              // Calculate BTC balance in EUR (using existing balance of 0.00014470 BTC)
+              const btcBalance = 0.0001447;
+              const balanceEUR = (btcBalance * priceEUR).toFixed(2);
+              footerDiv.textContent = `Balance: 0.00014470 BTC (${balanceEUR} EUR) 1 BTC~${priceEUR} EUR`;
+
+              // Apply fade flicker animation
+              footerDiv.classList.remove("price-update");
+              void footerDiv.offsetWidth; // Trigger reflow to restart animation
+              footerDiv.classList.add("price-update");
+            }
+
+            // Update the status bar price display
+            const statusLeft = document.querySelector(".status-left");
+            if (statusLeft) {
+              const btcBalance2 = 0.000154;
+              const balanceEUR2 = (btcBalance2 * priceEUR).toFixed(2);
+              statusLeft.textContent = `Saldo: 0.00015400 BTC (${balanceEUR2} EUR) 1 BTC=${priceEUR} EUR`;
+
+              // Apply fade flicker animation
+              statusLeft.classList.remove("price-update");
+              void statusLeft.offsetWidth; // Trigger reflow to restart animation
+              statusLeft.classList.add("price-update");
+            }
+          }
+        } catch (e) {
+          console.warn("Failed to fetch Bitcoin price", e);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        loadHeader();
+        updateBitcoinPrice();
+
+        // Update price every 2 minutes (120000 milliseconds)
+        setInterval(updateBitcoinPrice, 120000);
+      });
+    </script>
+  </head>
+  <body>
+    <div id="site-header">
+      <div class="header">
+        <h1>//<a href="index.html"> CANTAR EN LA RED DE BITCOIN [TO SING IN THE BITCOIN NETWORK]</a></h1>
+        <h2><s>// PARA PENSAR CON SATOSHIS [TO THINK WITH SATOSHIS]</s></h2>
+        <div class="search-box">
+          <input
+            type="search"
+            id="search-input"
+            placeholder="Buscar en esta página..."
+          />
+          <button onclick="buscarEnPagina()">🔍</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function buscarEnPagina() {
+        const texto = document.getElementById("search-input").value;
+        if (texto) {
+          window.find(texto);
+        }
+      }
+    </script>
+
+    <div class="wallet-title">
+      <div>
+        <span>Electrum 4.6.2 - flower_wallet [standard]</span>
+        <span class="dots">
+          <span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span>
+        </span>
+      </div>
+      <div class="controls">- □ X</div>
+    </div>
+
+    <div class="container">
+      <div class="content">
+        <div class="subtitle">//Nana Nathual: Macochi pitentzin [Nathual lullaby: Macochi pitentzin]</div>
+        <div class="date">1/1/2026 <span class="cursor"></span></div>
+
+        <p><span class="cursor"></span></p>
+
+        <div class="intro-text">
+          <p>&nbsp;</p>
+          <p>
+            //Two wallets agreed to record text lullabies on the blockchain
+            within irreversible economic transactions to recall almost forgotten
+            languages, traditions and care.
+          </p>
+        </div>
+
+        <div class="poem">
+          <div class="poem-line opreturn">OP_RETURN data</div>
+          <div class="poem-line">Macochi pitentzin</div>
+          <div class="poem-line">Manocoxteca pitelontsin</div>
+          <div class="poem-line">Macochi cochi</div>
+          <div class="poem-line">noxocóyotl</div>
+          <div class="poem-line">&nbsp;</div>
+          <div class="poem-line">Manocoxteca noxocoyotzin</div>
+          <div class="poem-line">Manocoxteca nopitelontzin</div>
+          <div class="poem-line">Macochi cochi</div>
+          <div class="poem-line">pitentzin</div>
+          <div class="poem-line">&nbsp;</div>
+          <div class="poem-line">Manocoxteca nopitelontzin</div>
+          <div class="poem-line">Manocoxteca noxocoyotzin</div>
+          <div class="poem-line">Macochi, cochi pitelontzin.</div>
+          <div class="poem-line">&nbsp;</div>
+        </div>
+
+        <div class="transaction-info">
+          <p>Transaction fee = +‎0,00015400 BTC(11.37 EUR)/vbytes</p>
+          <p>State: + 20250 confirmations</p>
+          <p>Date: ‎2026-01-01 19:03:30</p>
+          <p>Minted at the block: 930458 / 930459</p>
+          <p>&nbsp;</p>
+          <p>Bitcoin Transactions:</p>
+          <div class="links">
+            <p>
+              &nbsp;
+              <a
+                href="https://mempool.space/es/tx/3780e40043692912e991968f746bb3ddce60844b9ea37fab38fa64ecb474f881"
+                >3780e40043692912e991968f746bb3ddce60844b9ea37fab38fa64ecb474f881</a
+              >
+            </p>
+            <p>
+              &nbsp;
+              <a
+                href="https://mempool.space/es/tx/4c71bbb41113019505764a95f7b82a631419d4c2cc8e30d6f73a241e19fd37cd?showFlow=false#flow"
+                >4c71bbb41113019505764a95f7b82a631419d4c2cc8e30d6f73a241e19fd37cd</a
+              >
+            </p>
+            <p>
+              &nbsp;
+              <a
+                href="https://mempool.space/es/tx/cf99c4e248078c820a3e047305d82f18852393ba00cc0e3cb46ab9ed2501a7c3"
+                >cf99c4e248078c820a3e047305d82f18852393ba00cc0e3cb46ab9ed2501a7c3</a
+              >
+            </p>
+          </div>
+        </div>
+
+        <div class="note">
+          <p>
+            //PD: ‘Due to the limitations of the Anglo-Saxon syntax prevalent in the blockchain programming language, accents and special characters (which we see on this page) are excluded in the mempool translation. However, it can be well seen by decoding the hexadecimal message in natural language using a software online’.&nbsp;<br />
+            
+          </p>
+        </div>
+        <p class="spaced-cursor"><span class="cursor"></span></p>
+      </div>
+    </div>
+
+      <div class="footer">
+        <div>Balance: 0.00014470 BTC (11.09 EUR) 1 BTC~76,630.42 EUR</div>
+        <div class="footer-right">
+          <span class="blink-dot"></span>
+          <span>The update of Electrum 4.6.3 will be available soon</span>
+          <span class="footer-icon"><a href="Password.html">🔒</a></span>
+          <span class="footer-icon"><a href="settings.html">🛠️</a></span>
+          <span class="footer-icon"><a href="semilla.html">🌱</a></span
+          ><span class="footer-icon"><a href="Game.html">🟢</a></span>
+        </div>
+      </div>
+  </body>
+</html>

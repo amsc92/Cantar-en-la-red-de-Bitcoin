@@ -1,0 +1,519 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Rubik:wght@400;700&display=swap');
+
+/* Shared styles for the site (extracted from Index.html and nana-afrocubana.html) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: #00ff00;
+}
+
+body {
+    background-color: #1a1a1a;
+    color: #00ff00;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 16px;
+    line-height: 1.3;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Header (shared) */
+.header {
+    background-color: #2b2b2b;
+    padding: 15px 20px;
+    border-bottom: 2px dotted #00ff00;
+    position: relative;
+}
+
+.header h1 {
+  color: #00ff00;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-family: 'Rubik', sans-serif;
+}
+
+.header h1 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.header h1 a:hover {
+  text-decoration: underline;
+}
+
+.header h2 {
+  color: #00ff00;
+  font-size: 18px;
+  font-weight: bold;
+  font-family: 'Rubik', sans-serif;
+}
+
+.search-box {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+}
+
+.search-box input {
+  background-color: #00ff00;
+  border: none;
+  padding: 10px 15px;
+  color: #000;
+  font-size: 24px;
+  width: 60px;
+  cursor: pointer;
+}
+
+.header .search-box button.search-toggle {
+  background-color: #00ff00;
+  border: none;
+  padding: 10px 15px;
+  color: #000;
+  font-size: 24px;
+  width: 60px;
+  cursor: pointer;
+}
+
+.header .search-box input.site-search-input {
+  width: 260px;
+  max-width: calc(100vw - 120px);
+  padding: 10px;
+  border: 1px solid #00ff00;
+  background-color: #1a1a1a;
+  color: #00ff00;
+  font: inherit;
+}
+
+.header .search-box input.site-search-input::placeholder {
+  font-size: 12px;
+}
+
+.header .search-box input.site-search-input[hidden] {
+  display: none;
+}
+
+.search-filter-hidden {
+  display: none !important;
+}
+
+.wallet-title {
+  background-color: #1a1a1a;
+  color: #00ff00;
+  padding: 10px 20px;
+  border-bottom: 1px solid #00ff00;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 48px; /* ensure consistent vertical alignment across pages */
+}
+
+.wallet-title .dots {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+/* helper to make the left-side content and dots layout consistent */
+.wallet-title > div:first-child {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.wallet-title .dot {
+  width: 12px;
+  height: 12px;
+  background-color: #00ff00;
+  display: inline-block;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.wallet-title .controls { color: #00ff00; font-size: 18px; }
+
+.menu-bar { background-color: #1a1a1a; padding: 8px 20px; border-bottom: 1px solid #00ff00; }
+.menu-bar a { color: #00ff00; text-decoration: none; margin-right: 15px; }
+.menu-bar a:hover { text-decoration: none; }
+
+.toolbar { background-color: #2b2b2b; padding: 15px 20px; display: flex; gap: 20px; align-items: center; border-bottom: 1px solid #444; }
+.toolbar-btn { display: flex; align-items: center; gap: 10px; padding: 10px 20px; border: 2px solid #00ff00; background-color: transparent; color: #00ff00; cursor: pointer; font-family: "JetBrains Mono", monospace; font-size: 18px; }
+.toolbar-btn:hover { background-color: rgba(0,255,0,0.1); }
+.toolbar-icon { width: 24px; height: 24px; background-color: #00ff00; display: inline-block; }
+
+.content {
+    padding-right: 0;
+    padding-left: 0;
+    padding-bottom: 0;
+    margin-top: 40px;
+}
+
+table { width: 100%; border-collapse: collapse; background-color: #1a1a1a; }
+thead { background-color: #2b2b2b; }
+th { color: #00ff00; text-align: left; padding: 12px 20px; border-bottom: 1px solid #00ff00; font-weight: bold; }
+td { color: #00ff00; padding: 12px 20px; border-bottom: 1px solid #333; }
+td a { color: #00ff00; text-decoration: none; }
+td a:hover { color: #00cc00; }
+tr:hover { background-color: #2b2b2b; }
+
+.sidebar { position: fixed; left: 0; top: 200px; display: flex; flex-direction: column; gap: 10px; }
+.sidebar-dot { width: 10px; height: 10px; background-color: #00ff00; margin: 5px; }
+.close-btn {
+    position: fixed;
+    right: 20px;
+    top: 200px;
+    color: #00ff00;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.status-bar { position: fixed; bottom: 0; left: 0; right: 0; background-color: #1a1a1a; padding: 10px 20px; border-top: 1px solid #00ff00; display: flex; justify-content: space-between; align-items: center; }
+.status-left { color: #00ff00; }
+.status-right { display: flex; gap: 15px; align-items: center; }
+.status-icon { width: 20px; height: 20px; background-color: #00ff00; display: inline-block; }
+.minimize-btn { background-color: transparent; color: #00ff00; border: none; font-size: 20px; cursor: pointer; position: fixed; right: 80px; top: 200px; }
+
+.subtitle {
+    font-size: 16px;
+}
+.date { font-size: 16px; margin-bottom: 30px; }
+.intro-text { font-size: 16px; margin-bottom: 40px; line-height: 1.8; }
+.poem {
+    text-align: center;
+    font-size: 16px;
+    line-height: 1.8;
+    margin-top: 50px;
+    margin-right: 0;
+    margin-left: 0;
+    margin-bottom: 60px;
+}
+.poem-line { margin: 5px 0; }
+.poem .opreturn { text-align: left; }
+.note {
+    font-size: 16px;
+    margin-top: 60px;
+    line-height: 1.8;
+}
+.mempool-link { color: #00ff00; text-decoration: underline; }
+.footer {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: #1a1a1a;
+	padding: 15px 20px;
+	border-top: 1px solid #00FF00;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 16px;
+	border-bottom-color: #00FF00;
+	border-right-color: #00FF00;
+	border-left-color: #00FF00;
+}
+.footer-right { display: flex; align-items: center; gap: 15px; }
+.footer-icon { cursor: pointer; }
+.footer-icon a,
+.close-btn a { text-decoration: none; }
+.footer-icon a:hover,
+.close-btn a:hover { text-decoration: underline; }
+
+/* helper classes moved from inline styles in romanche page */
+.spaced-cursor {
+	margin-top: 80px;
+	margin-left: 400px;
+	color: inherit;
+}
+.close-icon { font-size: 18px; }
+.icon-green { border-radius: 50%; background-color: #00ff00; }
+
+/* Responsive tweaks */
+@media (max-width: 800px) {
+  .container {
+    padding-top: 0;
+    padding-right: 0px;
+    padding-left: 0px;
+    padding-bottom: 0;
+}
+  .header h1 { font-size: 20px; }
+  .header h2 { font-size: 16px; }
+  .search-box input {
+    padding-top: 8px;
+    padding-right: 8px;
+    padding-left: 8px;
+    padding-bottom: 8px;
+    width: 48px;
+    font-size: 20px;
+}
+  th, td { padding: 10px 12px; }
+}
+
+@media (max-width: 480px) {
+  .header { padding: 12px 12px; }
+  .toolbar { flex-direction: column; gap: 8px; align-items: flex-start; }
+  .wallet-title { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+
+
+      @keyframes fadeFlicker {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      .price-update {
+        animation: fadeFlicker 0.6s ease-in-out;
+      }
+.center {
+}
+.about-columns {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 40px;
+        margin-top: 20px;
+        line-height: 1.8;
+      }
+      .about-columns p {
+        margin-bottom: 24px;
+      }
+      @media (max-width: 700px) {
+        .about-columns {
+          grid-template-columns: 1fr;
+          gap: 0;
+        }
+      }
+
+body {
+  padding-bottom: 110px;
+}
+
+.status-bar {
+  bottom: 52px !important;
+}
+
+img,
+video,
+canvas,
+iframe {
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+@media (max-width: 760px) {
+  html,
+  body {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    padding-bottom: 0 !important;
+    overflow-wrap: anywhere;
+  }
+
+  .header {
+    padding-right: 82px !important;
+  }
+
+  .header h1 {
+    max-width: 100%;
+    font-size: 16px !important;
+    overflow-wrap: anywhere;
+  }
+
+  .header h2 {
+    max-width: 100%;
+    font-size: 12px !important;
+    overflow-wrap: anywhere;
+  }
+
+  .search-box {
+    right: 12px !important;
+  }
+
+  .wallet-title {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .wallet-title > div:first-child {
+    min-width: 0;
+    flex-wrap: wrap;
+  }
+
+  .wallet-title .dots {
+    display: none !important;
+  }
+
+  .menu-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 10px;
+  }
+
+  .menu-bar a {
+    margin-right: 0 !important;
+  }
+
+  .toolbar {
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    gap: 8px !important;
+  }
+
+  .toolbar-btn {
+    flex: 1 1 130px;
+    justify-content: center;
+    padding: 10px 12px !important;
+    font-size: 16px !important;
+  }
+
+  .container,
+  .content,
+  .info-box,
+  .settings-form,
+  .about-columns,
+  .game-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .container,
+  .content {
+    overflow-x: auto;
+  }
+
+  .info-box {
+    padding: 12px !important;
+  }
+
+  .note {
+    padding-left: 0 !important;
+  }
+
+  .spaced-cursor {
+    margin-left: 0 !important;
+  }
+
+  .content table,
+  .container > table {
+    min-width: 620px;
+  }
+
+  .container iframe,
+  .content iframe,
+  iframe {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 16 / 9;
+  }
+
+  img,
+  video,
+  canvas {
+    width: auto;
+    height: auto;
+  }
+
+  .setting-row {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 6px !important;
+  }
+
+  .footer,
+  .status-bar {
+    position: static !important;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .footer-right,
+  .status-right {
+    max-width: 100%;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .footer > div,
+  .status-bar > div {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (min-width: 761px) and (max-width: 1000px) {
+  .wallet-title {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .wallet-title > div:first-child {
+    min-width: 0;
+    flex-wrap: wrap;
+  }
+
+  .wallet-title .dots {
+    display: none !important;
+  }
+
+  .settings-panel {
+    width: calc(100% - 32px) !important;
+    max-width: none !important;
+    margin: 20px 16px !important;
+  }
+
+  .settings-panel .settings-form,
+  .settings-panel .setting-row {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .settings-panel .setting-row {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 6px !important;
+  }
+
+  .settings-panel .settings-form select {
+    min-width: 0;
+  }
+
+  .settings-panel .btn-group {
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 1000px) {
+  .settings-panel {
+    width: calc(100% - 16px) !important;
+    margin: 12px 8px !important;
+    padding: 8px !important;
+  }
+
+  .settings-panel .settings-form {
+    margin: 12px 0;
+  }
+}

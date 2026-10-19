@@ -1,0 +1,75 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #000;
+}
+
+#game-board {
+  width: min(100vw, 500px);
+  aspect-ratio: 1;
+  touch-action: none;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: 100% !important;
+}
+
+.touch-controls {
+  display: none;
+  width: 184px;
+  margin: 16px auto;
+  grid-template-columns: repeat(3, 56px);
+  grid-template-rows: repeat(2, 56px);
+  gap: 8px;
+}
+
+.touch-controls button {
+  border: 1px solid #60ff40;
+  border-radius: 8px;
+  background: #202020;
+  color: #60ff40;
+  font: bold 24px/1 sans-serif;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.touch-controls button:active {
+  background: #60ff40;
+  color: #000;
+}
+
+.touch-controls [data-direction="up"] {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.touch-controls [data-direction="left"] {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.touch-controls [data-direction="down"] {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.touch-controls [data-direction="right"] {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+@media (pointer: coarse), (max-width: 760px) {
+  .touch-controls {
+    display: grid;
+  }
+}
