@@ -1,4 +1,21 @@
-# Cantar en la red de Bitcoin
+# Cantar en la red de Bitcoin. Para pensar con satoshis
+
+ ___________________
+ | _______________ |
+ | |XXBLOCKXXXXXX| |
+ | |XXXXXXPOEMXXX| |
+ | |XXNaNaXXXXXXX| |
+ | |XXXXXXXXSONGX| |
+ | |XXXXXXXXXXXXX| |
+ |_________________|
+     _[_______]_
+ ___[___________]___
+|         [_____] []|__
+|         [_____] []|  \__
+L___________________J     \ \___\/
+ ___________________      /\
+/###################\    (__)
+
 
 Proyecto de arte conceptual y performativo sobre la memoria cultural, las nanas
 y la permanencia de los mensajes en la blockchain de Bitcoin. La web combina
