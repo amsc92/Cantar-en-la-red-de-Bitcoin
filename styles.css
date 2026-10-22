@@ -450,7 +450,16 @@ img {
     align-items: flex-start;
     gap: 8px;
   }
+	
+ .index-page {
+    padding-bottom: 240px !important;
+  }
 
+  .index-page .footer {
+    position: fixed !important;
+    z-index: 1000;
+  }
+	
   .footer-right,
   .status-right {
     max-width: 100%;
