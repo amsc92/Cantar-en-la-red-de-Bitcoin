@@ -509,10 +509,6 @@ img {
   .settings-panel .settings-form select {
     min-width: 0;
   }
-
-  .settings-panel .btn-group {
-    align-items: stretch;
-  }
 }
 
 @media (max-width: 1000px) {
@@ -524,5 +520,11 @@ img {
 
   .settings-panel .settings-form {
     margin: 12px 0;
+  }
+	 .settings-panel .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: stretch;
   }
 }
