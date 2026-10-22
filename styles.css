@@ -460,6 +460,15 @@ img {
     z-index: 1000;
   }
 	
+  .mempool-page {
+    padding-bottom: 240px !important;
+  }
+
+  .mempool-page .footer {
+    position: fixed !important;
+    z-index: 1000;
+  }
+
   .footer-right,
   .status-right {
     max-width: 100%;
