@@ -422,9 +422,9 @@ img {
     min-width: 620px;
   }
 
-  .container iframe,
-  .content iframe,
-  iframe {
+   .container iframe:not(.snake-game),
+  .content iframe:not(.snake-game),
+  iframe:not(.snake-game) {
     width: 100% !important;
     height: auto !important;
     aspect-ratio: 16 / 9;
